@@ -1,23 +1,29 @@
-export function createExtractionPrompt(texto: string, contexto?: string): string {
+export interface ExtractionItem {
+  id: number;
+  text: string;
+}
+
+export function createExtractionPrompt(itens: ExtractionItem[], contexto?: string): string {
   return `
-Você é um especialista em internacionalização (i18n).
-Recebi um texto extraído de um arquivo React (.tsx).
-Sua tarefa é gerar chaves curtas e descritivas em inglês (snake_case) para cada texto.
+Você é um especialista em i18n. Recebi uma lista de textos de uma interface React.
+Sua tarefa é gerar chaves (keys) semânticas e curtas em inglês (snake_case) para cada item.
 
 REGRAS:
-1. Retorne APENAS o JSON com o nome da chave e o valor.
-2. A chave deve ser o texto original e o valor deve ser a chave sugerida para o i18n.
-3. Se o texto for muito curto, a chave deve ser fiel ao significado.
+1. Retorne APENAS um array de objetos JSON.
+2. Cada objeto deve ter: "id" (o mesmo enviado) e "key" (a chave sugerida).
+3. As chaves devem ser curtas (max 4 palavras). 
+4. Textos longos devem ter chaves que resumam o sentido.
 
-TEXTO:
-${JSON.stringify(texto, null, 2)}
+EXEMPLO DE ENTRADA:
+[ { "id": 1, "text": "Salvar alterações" } ]
+
+EXEMPLO DE SAÍDA:
+[ { "id": 1, "key": "button_save_changes" } ]
+
+ITENS PARA PROCESSAR:
+${JSON.stringify(itens, null, 2)}
 
 ${contexto ? `Contexto do projeto: ${contexto}` : ''}
-
-RESPOSTA ESPERADA (Exemplo):
-{
-  "Salvar alterações": "buttons.save"
-}
 `.trim();
 }
 
@@ -28,21 +34,22 @@ export function createTranslationPrompt(
   contexto?: string
 ): string {
   return `
-Você é um tradutor profissional de software.
-Traduza o conteúdo deste arquivo JSON de i18n de "${from}" para "${to}".
+Você é um tradutor sênior de software especializado em localização (i18n).
+Sua tarefa é traduzir os VALORES das novas chaves de interface que foram adicionadas ao projeto.
 
-REGRAS:
-1. Mantenha as chaves idênticas ao original.
-2. Traduza apenas os valores.
-3. Mantenha tons e variáveis (ex: {{name}}, {0}) exatamente como estão.
-4. Tente manter a tradução concisa para interfaces de usuário.
-${contexto ? `5. Contexto do projeto: ${contexto}` : ''}
+IDIOMAS: De "${from}" para "${to}".
 
-JSON ORIGINAL:
-${JSON.stringify(jsonOriginal, null, 2)}
+REGRAS CRÍTICAS:
+1. MANUTENÇÃO DE CHAVES: Mantenha as chaves (keys) EXATAMENTE como estão. Não as traduza nem as altere.
+2. TRADUÇÃO DE VALORES: Traduza apenas os valores para o idioma de destino.
+3. VARIÁVEIS E PLACEHOLDERS: Preserve placeholders como {{name}}, {0}, %s ou qualquer texto entre chaves. Eles NÃO devem ser traduzidos.
+4. TOM DE VOZ: Use um tom profissional e conciso, adequado para interfaces de usuário (botões, labels, mensagens de erro).
+5. FORMATO: Retorne APENAS o objeto JSON puro, sem explicações ou blocos de código markdown.
 
-RESPOSTA ESPERADA:
-JSON puro, sem blocos de código markdown ou explicações.
+${contexto ? `CONTEXTO DO PROJETO: ${contexto}` : ''}
+
+DADOS PARA TRADUZIR:
+${JSON.stringify(delta, null, 2)}
 `.trim();
 }
 
