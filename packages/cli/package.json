@@ -1,0 +1,15 @@
+{
+  "name": "@scpa/auto-i18n-cli",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "auto-i18n": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@scpa/auto-i18n-core": "*",
+    "commander": "^14.0.2"
+  }
+}

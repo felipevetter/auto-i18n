@@ -1,0 +1,28 @@
+{
+  "name": "@scpa/auto-i18n",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "tsx packages/cli/src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "ts-morph": "^27.0.2"
+  }
+}

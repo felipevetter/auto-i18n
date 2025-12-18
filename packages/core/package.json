@@ -1,0 +1,11 @@
+{
+  "name": "@scpa/auto-i18n-core",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -b -w"
+  }
+}

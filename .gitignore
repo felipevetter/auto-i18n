@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+*.log
+.DS_Store
+auto-i18n.config.json
+.env
+playground/
+*.tsbuildinfo
