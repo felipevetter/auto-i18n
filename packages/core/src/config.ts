@@ -15,6 +15,7 @@ export async function createConfig() {
         sourceLang: "pt",
         targetLangs: ["en", "es"],
         provider: "openai",
+        localesDir: "./locales",
         model: "gpt-3.5-turbo",
         files: ["src/**/*.tsx", "src/**/*.ts"]
     };

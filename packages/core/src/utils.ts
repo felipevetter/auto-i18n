@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 export interface ExtractionItem {
   id: number;
   text: string;
@@ -28,7 +30,7 @@ ${contexto ? `Contexto do projeto: ${contexto}` : ''}
 }
 
 export function createTranslationPrompt(
-  jsonOriginal: object, 
+  delta: object, 
   from: string, 
   to: string, 
   contexto?: string
@@ -55,4 +57,16 @@ ${JSON.stringify(delta, null, 2)}
 
 export function cleanJsonResponse(text: string): string {
   return text.replace(/```json|```/g, '').trim();
+}
+
+export function lerJson(caminho: string): object {
+  if (!fs.existsSync(caminho)) {
+    fs.writeFileSync(caminho, '{}');
+    return {};
+  }
+  return JSON.parse(fs.readFileSync(caminho, 'utf-8'));
+}
+
+export function salvarJson(caminho: string, json: object): void {
+  fs.writeFileSync(caminho, JSON.stringify(json, null, 2));
 }
