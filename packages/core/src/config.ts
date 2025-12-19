@@ -15,7 +15,7 @@ export function readConfig(key: string) {
 export function createConfig() {
     const spinner = ora('Criando arquivos de configuração...').start();
     const defaultConfig = {
-        $schema: `https://unpkg.com/@scpa/auto-i18n-core@latest/schema.json`,
+        $schema: `https://unpkg.com/@scopeact/autoi18n-core@latest/schema.json`,
         sourceLang: "pt",
         targetLangs: ["en", "es"],
         provider: "openai",

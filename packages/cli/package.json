@@ -1,15 +1,22 @@
 {
-  "name": "@scpa/auto-i18n",
-  "version": "1.0.0",
+  "name": "@scopeact/autoi18n",
+  "version": "1.0.2",
   "type": "module",
   "bin": {
-    "@scpa/auto-i18n": "./dist/index.js"
+    "@scopeact/autoi18n": "./dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc"
   },
   "dependencies": {
-    "@scpa/auto-i18n-core": "*",
-    "commander": "^14.0.2"
+    "@scopeact/autoi18n-core": "*",
+    "commander": "^14.0.2",
+    "chalk": "^5.6.2",
+    "dotenv": "^17.2.3",
+    "ora": "^9.0.0",
+    "ts-morph": "^27.0.2"
   }
 }

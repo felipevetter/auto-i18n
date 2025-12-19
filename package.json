@@ -1,6 +1,6 @@
 {
-  "name": "@scpa/auto-i18n-workspace",
-  "version": "1.0.0",
+  "name": "@scopeact/autoi18n-workspace",
+  "version": "1.0.2",
   "description": "",
   "scripts": {
     "build": "npm run build --workspaces",

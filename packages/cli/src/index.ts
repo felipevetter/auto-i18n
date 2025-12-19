@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { run, init } from '@scpa/auto-i18n-core';
+import { run, init } from '@scopeact/autoi18n-core';
 import { Command } from 'commander';
 const program = new Command();
 
 program
-  .name('@scpa/auto-i18n')
+  .name('@scopeact/autoi18n')
   .description('CLI para geração de arquivos e tradução automática de arquivos tsx');
 
 program

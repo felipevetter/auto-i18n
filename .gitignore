@@ -7,3 +7,4 @@ auto-i18n.config.json
 .env
 playground/
 *.tsbuildinfo
+.npmrc

@@ -1,6 +1,6 @@
 {
-  "name": "@scpa/auto-i18n-core",
-  "version": "1.0.0",
+  "name": "@scopeact/autoi18n-core",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
