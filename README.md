@@ -1,8 +1,8 @@
-# @scpa/auto-i18n 🌍
+# @scopeact/autoi18n 🌍
 
 **Transforme seu código React/TS em uma aplicação multi-idioma em segundos usando IA.**
 
-`@scpa/auto-i18n` é uma ferramenta de linha de comando (CLI) que automatiza o processo mais chato do desenvolvimento de software: a internacionalização (i18n). Ele varre seus arquivos, extrai textos, gera chaves inteligentes com IA e cria os arquivos de tradução JSON automaticamente.
+`@scopeact/autoi18n` é uma ferramenta de linha de comando (CLI) que automatiza o processo mais chato do desenvolvimento de software: a internacionalização (i18n). Ele varre seus arquivos, extrai textos, gera chaves inteligentes com IA e cria os arquivos de tradução JSON automaticamente.
 
 ---
 
@@ -22,7 +22,7 @@ Você pode rodar diretamente via `npx`:
 
 ```bash
 # 1. Inicialize a configuração
-npx @scpa/auto-i18n init
+npx @scopeact/autoi18n init
 
 # 2. Configure suas chaves de API no arquivo .env
 # OPENAI_API_KEY=sua_chave
@@ -32,7 +32,7 @@ npx @scpa/auto-i18n init
 # ou OLLAMA_API_KEY=sua_chave
 
 # 3. Execute a automação
-npx @scpa/auto-i18n run
+npx @scopeact/autoi18n run
 ```
 
 ---
