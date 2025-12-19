@@ -23,7 +23,7 @@
       "type": "string",
       "description": "O Provider de IA que será utilizado para tradução.",
       "default": "openai",
-      "enum": ["openai", "google", "deepseek"]
+      "enum": ["openai", "google", "deepseek", "openrouter", "ollama"]
     },
     "model": {
       "type": "string",
