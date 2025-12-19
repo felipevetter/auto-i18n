@@ -1,6 +1,6 @@
 {
   "name": "@scopeact/autoi18n",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "bin": {
     "@scopeact/autoi18n": "./dist/index.js"
