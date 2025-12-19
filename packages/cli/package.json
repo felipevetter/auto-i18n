@@ -1,5 +1,5 @@
 {
-  "name": "@scpa/auto-i18n-cli",
+  "name": "@scpa/auto-i18n",
   "version": "1.0.0",
   "type": "module",
   "bin": {
