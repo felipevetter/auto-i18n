@@ -2,7 +2,7 @@ import ora from "ora";
 import { Node, Project, SyntaxKind } from "ts-morph";
 import { readConfig } from "./config.js";
 import { createExtractionPrompt, createTranslationPrompt, lerJson, salvarJson, type ExtractionItem } from "./utils.js";
-import { askLLM } from "./AI.js";
+import { askLLM } from "./ai.js";
 import chalk from "chalk";
 
 interface JsonTranslation {

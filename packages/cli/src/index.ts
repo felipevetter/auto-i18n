@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { run, init } from '@scpa/auto-i18n-core';
 import { Command } from 'commander';
 const program = new Command();

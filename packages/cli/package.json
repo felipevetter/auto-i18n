@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "bin": {
-    "auto-i18n": "./dist/index.js"
+    "@scpa/auto-i18n": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc"
