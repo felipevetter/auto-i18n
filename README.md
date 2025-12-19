@@ -1,4 +1,7 @@
-# @scopeact/autoi18n 🌍
+# @scopeact/autoi18n
+
+[![npm version](https://img.shields.io/npm/v/@scopeact/autoi18n.svg)](https://www.npmjs.com/package/@scopeact/autoi18n)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Transforme seu código React/TS em uma aplicação multi-idioma em segundos usando IA.**
 
