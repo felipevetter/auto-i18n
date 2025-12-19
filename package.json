@@ -1,9 +1,9 @@
 {
   "name": "@scopeact/autoi18n-workspace",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build -w packages/core && npm run build -w packages/cli",
     "dev": "tsx packages/cli/src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,8 +12,12 @@
     "packages/*"
   ],
   "private": true,
-  "author": "",
-  "license": "ISC",
+  "author": "Felipe Vetter",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felipevetter/auto-i18n.git"
+  },
   "type": "module",
   "devDependencies": {
     "@types/node": "^25.0.3",

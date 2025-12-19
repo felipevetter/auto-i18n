@@ -1,6 +1,6 @@
 {
   "name": "@scopeact/autoi18n-core",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,6 +11,10 @@
   "scripts": {
     "build": "tsc -b",
     "watch": "tsc -b -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/felipevetter/auto-i18n.git"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
