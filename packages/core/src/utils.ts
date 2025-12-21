@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 
 export interface ExtractionItem {
   id: number;
@@ -61,12 +62,17 @@ export function cleanJsonResponse(text: string): string {
 
 export function lerJson(caminho: string): object {
   if (!fs.existsSync(caminho)) {
+    fs.mkdirSync(path.dirname(caminho), { recursive: true });
     fs.writeFileSync(caminho, '{}');
     return {};
   }
+  
   return JSON.parse(fs.readFileSync(caminho, 'utf-8'));
 }
 
 export function salvarJson(caminho: string, json: object): void {
+  if(!fs.existsSync(caminho)) {
+    fs.mkdirSync(path.dirname(caminho), { recursive: true });
+  }
   fs.writeFileSync(caminho, JSON.stringify(json, null, 2));
 }

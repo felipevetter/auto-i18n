@@ -8,3 +8,4 @@ auto-i18n.config.json
 playground/
 *.tsbuildinfo
 .npmrc
+*.tsx

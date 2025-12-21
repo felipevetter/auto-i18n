@@ -18,6 +18,8 @@ export function createConfig() {
         $schema: `https://unpkg.com/@scopeact/autoi18n-core@latest/schema.json`,
         sourceLang: "pt",
         targetLangs: ["en", "es"],
+        autoInject: false,
+        i18nLibrary: "react-i18next",
         provider: "openai",
         localesDir: "./locales",
         model: "gpt-3.5-turbo",

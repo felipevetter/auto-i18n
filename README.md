@@ -3,86 +3,254 @@
 [![npm version](https://img.shields.io/npm/v/@scopeact/autoi18n.svg)](https://www.npmjs.com/package/@scopeact/autoi18n)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Transforme seu código React/TS em uma aplicação multi-idioma em segundos usando IA.**
+> CLI to automatically migrate React / TypeScript projects to i18n using AST and LLMs.
 
-`@scopeact/autoi18n` é uma ferramenta de linha de comando (CLI) que automatiza o processo mais chato do desenvolvimento de software: a internacionalização (i18n). Ele varre seus arquivos, extrai textos, gera chaves inteligentes com IA e cria os arquivos de tradução JSON automaticamente.
+**auto-i18n** scans TS/TSX files, extracts hardcoded strings, replaces them with `t("key")`, generates translation files, and optionally injects the correct i18n imports — all with explicit, opinionated trade-offs.
 
----
-
-## ✨ Funcionalidades
-
-- **Extração Inteligente:** Identifica textos em arquivos `.tsx` e `.ts` usando AST (Abstract Syntax Tree).
-- **Chaves Semânticas:** Em vez de chaves genéricas como `text1`, a IA gera chaves como `button_save_changes`.
-- **Múltiplos Provedores:** Suporte para OpenAI, Google Gemini, DeepSeek, OpenRouter e Ollama.
-- **Tradução Automática:** Traduz instantaneamente para múltiplos idiomas mantendo o contexto.
-- **Preservação de Código:** Substitui os textos no seu código por chamadas `{t('chave')}` de forma segura.
+This is a **migration tool**, not a runtime framework.
 
 ---
 
-## 🚀 Como usar
+## Why this exists
 
-Você pode rodar diretamente via `npx`:
+Internationalizing a React codebase usually means:
+
+* Manually hunting hardcoded strings
+* Guessing translation keys
+* Rewriting components by hand
+* Copy-pasting JSON across languages
+
+It’s repetitive, boring, and easy to screw up.
+
+**auto-i18n automates the mechanical work and delegates semantic decisions to an LLM.**
+
+---
+
+## What this tool does
+
+* Parses **TypeScript and TSX using AST** (no regex hacks)
+* Detects static hardcoded strings
+* Rewrites code to use `t("key")`
+* Generates translation files
+* Uses an **LLM to generate semantic translation keys**
+* Optionally injects i18n imports automatically
+* Supports different i18n libraries
+
+---
+
+## Installation
+
+No global install required:
 
 ```bash
-# 1. Inicialize a configuração
-npx @scopeact/autoi18n init
-
-# 2. Configure suas chaves de API no arquivo .env
-# OPENAI_API_KEY=sua_chave
-# ou GOOGLE_API_KEY=sua_chave
-# ou DEEPSEEK_API_KEY=sua_chave
-# ou OPENROUTER_API_KEY=sua_chave
-# ou OLLAMA_API_KEY=sua_chave
-
-# 3. Execute a automação
-npx @scopeact/autoi18n run
+npx @scopeact/auto-i18n init
 ```
 
 ---
 
-## ⚙️ Configuração
+## Usage
 
-Após rodar o `init`, um arquivo `auto-i18n.config.json` será criado:
+### 1. Initialize configuration
+
+```bash
+npx @scopeact/auto-i18n init
+```
+
+This creates:
+
+* `auto-i18n.config.json`
+
+---
+
+### 2. Run the migration
+
+```bash
+npx @scopeact/auto-i18n run
+```
+
+The tool will:
+
+1. Parse files into AST
+2. Detect static string literals
+3. Ask the LLM to infer **semantic translation keys**
+4. Rewrite source code
+5. Inject i18n imports if missing
+6. Generate translation files
+
+---
+
+## Example
+
+### Before
+
+```tsx
+export function Home() {
+  return (
+    <div>
+      <h1>Hello world</h1>
+      <p>Welcome to our platform</p>
+    </div>
+  );
+}
+```
+
+### After
+
+```tsx
+import { useTranslation } from "react-i18next";
+
+export function Home() {
+  return (
+    <div>
+      <h1>{t("greeting")}</h1>
+      <p>{t("description")}</p>
+    </div>
+  );
+}
+```
+
+Generated translation file:
 
 ```json
 {
-  "sourceLang": "pt",
-  "targetLangs": ["en", "es"],
-  "provider": "openai",
-  "model": "gpt-4o",
-  "localesDir": "./src/locales",
-  "files": ["src/**/*.tsx"]
+  "greeting": "Hello world",
+  "description": "Welcome to our platform"
 }
 ```
 
 ---
 
-## 🛠️ Requisitos
+## Configuration
 
-- **Node.js:** v20 ou superior.
-- **i18next:** O código gerado assume que você utiliza a biblioteca `i18next` com o hook `t`.
+Example `auto-i18n.config.json`:
+
+```json
+{
+  "sourceLang": "pt",
+  "targetLangs": [ "en", "es", "de" ],
+  "autoInject": true,
+  "i18nLibrary": "react-i18next",
+  "provider": "ollama",
+  "localesDir": "./locales",
+  "model": "gemma3-translator",
+  "files": [ "**/*.tsx" ]
+}
+```
+
+### Options
+
+#### `autoInject`
+
+```json
+{
+  "autoInject": true
+}
+```
+
+Automatically injects the required i18n import at the top of the file **if it does not already exist**.
+
+This avoids manual setup and keeps the migration fully automated.
 
 ---
 
-## 📂 Estrutura do Projeto
+#### `i18nLibrary`
 
-O CLI busca textos em:
-- Conteúdo de tags JSX (`<div>Texto</div>`)
-- *Próximas versões:* Atributos de componentes (placeholder, title) e strings literais em funções.
+```json
+{
+  "i18nLibrary": "react-i18next"
+}
+```
+
+Defines which i18n library should be used when injecting imports and hooks.
+
+Supported values:
+
+* `react-i18next`
+* `next-i18n`
+
+This affects:
+
+* import statements
+* generated code structure
 
 ---
 
-## 🤝 Contribuição
+## Why keys are AI-generated (no dry-run)
 
-Contribuições são muito bem-vindas! Sinta-se à vontade para abrir Issues ou enviar Pull Requests.
+Translation key naming is a **semantic problem**, not a mechanical one.
 
-Dica: Ao clonar o repo, use `npm install` na raiz para configurar o workspace.
+For example:
+
+* Is `"Hello world"` a title, a CTA, or a heading?
+* Does it belong to `home`, `layout`, or `marketing`?
+
+These decisions cannot be inferred deterministically.
+
+**auto-i18n intentionally requires an LLM to:**
+
+* infer intent
+* generate meaningful keys
+* avoid arbitrary conventions
+
+Because of this, a traditional dry-run would produce **misleading results** and is intentionally not supported.
+
+This trade-off is explicit.
 
 ---
 
-## 📄 Licença
+## Why AST instead of regex
 
-Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para mais informações.
+Regex does not understand JSX or TypeScript.
+
+AST parsing:
+
+* Preserves syntax structure
+* Avoids accidental replacements
+* Handles real-world React code
+* Produces predictable transformations
+
+This tool is designed for **production codebases**, not demos.
 
 ---
-Criado por [Felipe Vetter](https://github.com/felipevetter) - Conecte-se comigo no [LinkedIn](https://www.linkedin.com/in/felipevetter)
+
+## Limitations
+
+This tool does **not** handle:
+
+* Dynamic strings (`"Hello " + name`)
+* Template literals with expressions
+* Runtime-generated text
+* Context-dependent translations
+
+It is meant to **bootstrap i18n**, not replace human review.
+
+---
+
+## When you should NOT use this
+
+* Your project already has a mature i18n setup
+* Translations depend heavily on runtime logic
+* You expect zero review after migration
+
+---
+
+## Design philosophy
+
+* Explicit over clever
+* Predictable over magical
+* Narrow scope over feature bloat
+
+This tool solves **one specific problem**, deliberately.
+
+---
+
+## License
+
+Distributed under MIT license. See [LICENSE](LICENSE) for more details.
+
+---
+
+## 🇧🇷 Nota
+
+README principal em inglês por usabilidade global.
+Português aqui só pra lembrar que esse projeto nasceu no Brasil.

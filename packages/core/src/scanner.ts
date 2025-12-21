@@ -1,9 +1,10 @@
 import ora from "ora";
 import { Node, Project, SyntaxKind } from "ts-morph";
 import { readConfig } from "./config.js";
-import { createExtractionPrompt, createTranslationPrompt, lerJson, salvarJson, type ExtractionItem } from "./utils.js";
+import { cleanJsonResponse, createExtractionPrompt, createTranslationPrompt, lerJson, salvarJson, type ExtractionItem } from "./utils.js";
 import { askLLM } from "./ai.js";
 import chalk from "chalk";
+import { ensureI18nImport } from "./dependecies.js";
 
 interface JsonTranslation {
     [key: string]: string;
@@ -29,6 +30,10 @@ export async function scanFilesAndRun() {
     const arquivos = project.getSourceFiles();
 
     for (const arquivo of arquivos) {
+        const shouldInject = readConfig("autoInject") || false;
+        if(shouldInject) {
+            ensureI18nImport(arquivo);
+        }
         arquivo.forEachDescendant((node) => {
             if (node.getKind() === SyntaxKind.JsxText) {
                 const textoOriginal = node.getText();
@@ -52,7 +57,7 @@ export async function scanFilesAndRun() {
         text
     })) as ExtractionItem[];
 
-    const respostaIA = JSON.parse(await askLLM(createExtractionPrompt(listaParaIA), 'json'));
+    const respostaIA = JSON.parse(cleanJsonResponse(await askLLM(createExtractionPrompt(listaParaIA), 'text')));
 
     respostaIA.forEach((item: any) => {
         const originalText = listaParaIA.find(l => l.id === item.id)?.text;
@@ -96,7 +101,7 @@ export async function scanFilesAndRun() {
         if (Object.keys(deltaParaTraduzir).length > 0) {
             const prompt = createTranslationPrompt(deltaParaTraduzir, sourceLang, idioma);
 
-            const respostaIA = await askLLM(prompt, 'json');
+            const respostaIA = cleanJsonResponse(await askLLM(prompt, 'text'));
             const traducoesEn = JSON.parse(respostaIA);
 
             const jsonIdiomaFinal = { ...jsonIdiomaAtual, ...traducoesEn };
