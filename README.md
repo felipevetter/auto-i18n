@@ -43,7 +43,7 @@ It’s repetitive, boring, and easy to screw up.
 No global install required:
 
 ```bash
-npx @scopeact/auto-i18n init
+npx @scopeact/autoi18n init
 ```
 
 ---
@@ -53,7 +53,7 @@ npx @scopeact/auto-i18n init
 ### 1. Initialize configuration
 
 ```bash
-npx @scopeact/auto-i18n init
+npx @scopeact/autoi18n init
 ```
 
 This creates:
@@ -65,7 +65,7 @@ This creates:
 ### 2. Run the migration
 
 ```bash
-npx @scopeact/auto-i18n run
+npx @scopeact/autoi18n run
 ```
 
 The tool will:

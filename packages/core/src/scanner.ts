@@ -57,7 +57,7 @@ export async function scanFilesAndRun() {
         text
     })) as ExtractionItem[];
 
-    const respostaIA = JSON.parse(cleanJsonResponse(await askLLM(createExtractionPrompt(listaParaIA), 'text')));
+    const respostaIA = JSON.parse(cleanJsonResponse(await askLLM(createExtractionPrompt(listaParaIA), 'json')));
 
     respostaIA.forEach((item: any) => {
         const originalText = listaParaIA.find(l => l.id === item.id)?.text;
@@ -79,7 +79,7 @@ export async function scanFilesAndRun() {
         novasChavesParaSalvar[chaveGerada] = textoOriginal;
     }
 
-    const pathPt = `${localesDir}/pt.json`;
+    const pathPt = `${localesDir}/${sourceLang}.json`;
     const jsonPtAtual = lerJson(pathPt);
     const jsonPtFinal = { ...jsonPtAtual, ...novasChavesParaSalvar };
 
@@ -101,7 +101,7 @@ export async function scanFilesAndRun() {
         if (Object.keys(deltaParaTraduzir).length > 0) {
             const prompt = createTranslationPrompt(deltaParaTraduzir, sourceLang, idioma);
 
-            const respostaIA = cleanJsonResponse(await askLLM(prompt, 'text'));
+            const respostaIA = cleanJsonResponse(await askLLM(prompt, 'json'));
             const traducoesEn = JSON.parse(respostaIA);
 
             const jsonIdiomaFinal = { ...jsonIdiomaAtual, ...traducoesEn };
