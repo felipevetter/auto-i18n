@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Auto i18n Config",
+  "type": "object",
+  "properties": {
+    "sourceLang": {
+      "type": "string",
+      "description": "O idioma de origem dos textos no seu código.",
+      "default": "pt"
+    },
+    "targetLangs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Lista de idiomas para os quais você deseja traduzir."
+    },
+    "files": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Glob patterns dos arquivos que o CLI deve escanear.",
+      "default": ["src/**/*.tsx"]
+    },
+    "autoInject": {
+      "type": "boolean",
+      "description": "Se deve automaticamente injetar no topo do arquivo o import de i18n (caso não exista).",
+      "default": true
+    },
+    "i18nLibrary": {
+      "type": "string",
+      "description": "A biblioteca de i18n que será utilizada.",
+      "default": "react-i18next",
+      "enum": ["react-i18next", "next-i18n"]
+    },
+    "provider": {
+      "type": "string",
+      "description": "O Provider de IA que será utilizado para tradução.",
+      "default": "openai",
+      "enum": ["openai", "google", "deepseek", "openrouter", "ollama"]
+    },
+    "model": {
+      "type": "string",
+      "description": "O modelo de IA que será utilizado para tradução.",
+      "default": "gpt-3.5-turbo"
+    },
+    "localesDir": {
+      "type": "string",
+      "description": "O diretório onde os arquivos JSON de tradução estão localizados.",
+      "default": "./locales"
+    }
+  },
+  "required": ["sourceLang", "targetLangs", "localesDir"]
+}
