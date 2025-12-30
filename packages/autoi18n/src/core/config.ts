@@ -19,11 +19,11 @@ export function createConfig() {
         sourceLang: "pt",
         targetLangs: ["en", "es"],
         autoInject: false,
-        i18nLibrary: "react-i18next",
+        i18nLibrary: "@scopeact/autoi18n",
         provider: "openai",
         localesDir: "./locales",
         model: "gpt-3.5-turbo",
-        files: ["src/**/*.tsx", "app/**/*.tsx"]
+        files: ["app/**/*.tsx", "components/**/*.tsx"]
     };
 
     fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2));

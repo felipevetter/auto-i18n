@@ -20,4 +20,4 @@ program
     init();
   });
 
-program.parse();
+program.parse(process.argv);

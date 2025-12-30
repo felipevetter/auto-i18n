@@ -10,14 +10,20 @@
     },
     "targetLangs": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Lista de idiomas para os quais você deseja traduzir."
     },
     "files": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Glob patterns dos arquivos que o CLI deve escanear.",
-      "default": ["src/**/*.tsx"]
+      "default": [
+        "app/**/*.tsx"
+      ]
     },
     "autoInject": {
       "type": "boolean",
@@ -27,19 +33,43 @@
     "i18nLibrary": {
       "type": "string",
       "description": "A biblioteca de i18n que será utilizada.",
-      "default": "react-i18next",
-      "enum": ["react-i18next", "next-i18n"]
+      "default": "@scopeact/autoi18n",
+      "enum": [
+        "react-i18next",
+        "next-intl",
+        "@scopeact/autoi18n"
+      ]
     },
     "provider": {
       "type": "string",
       "description": "O Provider de IA que será utilizado para tradução.",
       "default": "openai",
-      "enum": ["openai", "google", "deepseek", "openrouter", "ollama"]
+      "enum": [
+        "openai",
+        "google",
+        "deepseek",
+        "openrouter",
+        "ollama"
+      ]
     },
     "model": {
       "type": "string",
       "description": "O modelo de IA que será utilizado para tradução.",
-      "default": "gpt-3.5-turbo"
+      "default": "gpt-4o-mini",
+      "anyOf": [
+        {
+          "enum": [
+            "gpt-3.5-turbo",
+            "gpt-4",
+            "gpt-4-turbo",
+            "gpt-4o-mini",
+            "gpt-4o",
+            "gemini-2.5-flash",
+            "gemini-2.5-pro",
+            "gemini-2.5-flash-lite"
+          ]
+        }
+      ]
     },
     "localesDir": {
       "type": "string",
@@ -47,5 +77,9 @@
       "default": "./locales"
     }
   },
-  "required": ["sourceLang", "targetLangs", "localesDir"]
+  "required": [
+    "sourceLang",
+    "targetLangs",
+    "localesDir"
+  ]
 }
