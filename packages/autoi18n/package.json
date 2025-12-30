@@ -6,6 +6,10 @@
     "main": "./dist/index.js",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/felipevetter/auto-i18n.git"
+    },
     "bin": {
         "@scopeact/autoi18n": "./dist/cli.js"
     },
