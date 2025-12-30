@@ -1,256 +1,117 @@
+
 # @scopeact/autoi18n
 
-[![npm version](https://img.shields.io/npm/v/@scopeact/autoi18n.svg)](https://www.npmjs.com/package/@scopeact/autoi18n)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm version](https://img.shields.io/npm/v/@scopeact/autoi18n.svg?style=flat-square)](https://www.npmjs.com/package/@scopeact/autoi18n)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/felipevetter/auto-i18n/publish.yml?style=flat-square)](https://github.com/felipevetter/auto-i18n/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg?style=flat-square)](https://github.com/felipevetter/auto-i18n/pulls)
 
-> CLI to automatically migrate React / TypeScript projects to i18n using AST and LLMs.
+> The only i18n tool that handles both **Extraction** (via AST + AI) and **Runtime** (Zero-Config).
 
-**auto-i18n** scans TS/TSX files, extracts hardcoded strings, replaces them with `t("key")`, generates translation files, and optionally injects the correct i18n imports — all with explicit, opinionated trade-offs.
-
-This is a **migration tool**, not a runtime framework.
-
----
-
-## Why this exists
-
-Internationalizing a React codebase usually means:
-
-* Manually hunting hardcoded strings
-* Guessing translation keys
-* Rewriting components by hand
-* Copy-pasting JSON across languages
-
-It’s repetitive, boring, and easy to screw up.
-
-**auto-i18n automates the mechanical work and delegates semantic decisions to an LLM.**
+**autoi18n** is a dual-purpose tool designed to take a hardcoded React/Next.js project to full internationalization in minutes, not hours.
 
 ---
 
-## What this tool does
+## ⚡ The Core: CLI Migration
 
-* Parses **TypeScript and TSX using AST** (no regex hacks)
-* Detects static hardcoded strings
-* Rewrites code to use `t("key")`
-* Generates translation files
-* Uses an **LLM to generate semantic translation keys**
-* Optionally injects i18n imports automatically
-* Supports different i18n libraries
+The CLI scans your `TSX` files, extracts hardcoded strings using **Abstract Syntax Tree (AST)**, and uses **AI to generate semantic keys**.
 
----
+- **No Regex:** Safe code transformations that won't break your syntax.
+- **AI-Powered:** Keys like `welcome_title` instead of `text_1`.
+- **Auto-Inject:** Automatically adds imports to your files.
 
-## Installation
-
-No global install required:
-
+### Quick Start
 ```bash
 npx @scopeact/autoi18n init
-```
-
----
-
-## Usage
-
-### 1. Initialize configuration
-
-```bash
-npx @scopeact/autoi18n init
-```
-
-This creates:
-
-* `auto-i18n.config.json`
-
----
-
-### 2. Run the migration
-
-```bash
 npx @scopeact/autoi18n run
 ```
 
-The tool will:
-
-1. Parse files into AST
-2. Detect static string literals
-3. Ask the LLM to infer **semantic translation keys**
-4. Rewrite source code
-5. Inject i18n imports if missing
-6. Generate translation files
-
 ---
 
-## Example
+## 🚀 The Feature: Zero-Config Runtime
 
-### Before
+We noticed that even after extracting strings, configuring i18n in **Next.js (App Router)** is a nightmare (Middleware, `[locale]` folders, etc). 
+
+So we built a **minimalist, high-performance runtime** specifically for the CLI output.
+
+### 1. Setup the Provider (Root Layout)
+No need to move files into `[locale]` folders. Just wrap your layout.
 
 ```tsx
-export function Home() {
+// app/layout.tsx
+import { I18nProvider } from "@scopeact/autoi18n/client";
+import { getI18nConfig } from "@scopeact/autoi18n/server";
+
+export default async function RootLayout({ children }) {
+  const i18n = await getI18nConfig('en'); // Default language
+
   return (
-    <div>
-      <h1>Hello world</h1>
-      <p>Welcome to our platform</p>
-    </div>
+    <html lang={i18n.locale}>
+      <body>
+        <I18nProvider locale={i18n.locale} messages={i18n.messages}>
+          {children}
+        </I18nProvider>
+      </body>
+    </html>
   );
 }
 ```
 
-### After
-
+### 2. Usage in Server Components
 ```tsx
-import { useTranslation } from "react-i18next";
+// app/page.tsx (Server)
+import { getI18n } from '@scopeact/autoi18n/server';
 
-export function Home() {
-  return (
-    <div>
-      <h1>{t("greeting")}</h1>
-      <p>{t("description")}</p>
-    </div>
-  );
+export default async function Page() {
+  const { t } = await getI18n();
+  return <h1>{t("hero_title")}</h1>;
 }
 ```
 
-Generated translation file:
+### 3. Usage in Client Components
+```tsx
+// components/Button.tsx (Client)
+'use client';
+import { useI18n } from '@scopeact/autoi18n/client';
 
-```json
-{
-  "greeting": "Hello world",
-  "description": "Welcome to our platform"
+export function HeroButton() {
+  const { t } = useI18n();
+  return <button>{t("get_started")}</button>;
 }
 ```
 
 ---
 
-## Configuration
+## 🛠 Configuration
 
-Example `auto-i18n.config.json`:
+Created via `init`, the `auto-i18n.config.json` controls the magic:
 
 ```json
 {
   "sourceLang": "pt",
-  "targetLangs": [ "en", "es", "de" ],
-  "autoInject": true,
-  "i18nLibrary": "react-i18next",
-  "provider": "ollama",
+  "targetLangs": ["en", "es"],
+  "i18nLibrary": "@scopeact/autoi18n",
+  "provider": "openai",
   "localesDir": "./locales",
-  "model": "gemma3-translator",
-  "files": [ "**/*.tsx" ]
+  "files": ["src/**/*.tsx"]
 }
 ```
 
-### Options
+---
 
-#### `autoInject`
+## 💎 Why autoi18n?
 
-```json
-{
-  "autoInject": true
-}
-```
-
-Automatically injects the required i18n import at the top of the file **if it does not already exist**.
-
-This avoids manual setup and keeps the migration fully automated.
+| Feature | Tradicional (next-intl/i18next) | **autoi18n** |
+| :--- | :--- | :--- |
+| **Key Creation** | Manual (Hours of copy-paste) | **AI-Automated** (Seconds) |
+| **Code Rewrite** | Manual | **AST-Automated** |
+| **Folder Structure** | Forced `[locale]` nesting | **Stay as you are** |
+| **Next.js Setup** | Complex (Middleware/Config) | **Zero-Config** |
 
 ---
 
-#### `i18nLibrary`
-
-```json
-{
-  "i18nLibrary": "react-i18next"
-}
-```
-
-Defines which i18n library should be used when injecting imports and hooks.
-
-Supported values:
-
-* `react-i18next`
-* `next-i18n`
-
-This affects:
-
-* import statements
-* generated code structure
-
----
-
-## Why keys are AI-generated (no dry-run)
-
-Translation key naming is a **semantic problem**, not a mechanical one.
-
-For example:
-
-* Is `"Hello world"` a title, a CTA, or a heading?
-* Does it belong to `home`, `layout`, or `marketing`?
-
-These decisions cannot be inferred deterministically.
-
-**auto-i18n intentionally requires an LLM to:**
-
-* infer intent
-* generate meaningful keys
-* avoid arbitrary conventions
-
-Because of this, a traditional dry-run would produce **misleading results** and is intentionally not supported.
-
-This trade-off is explicit.
-
----
-
-## Why AST instead of regex
-
-Regex does not understand JSX or TypeScript.
-
-AST parsing:
-
-* Preserves syntax structure
-* Avoids accidental replacements
-* Handles real-world React code
-* Produces predictable transformations
-
-This tool is designed for **production codebases**, not demos.
-
----
-
-## Limitations
-
-This tool does **not** handle:
-
-* Dynamic strings (`"Hello " + name`)
-* Template literals with expressions
-* Runtime-generated text
-* Context-dependent translations
-
-It is meant to **bootstrap i18n**, not replace human review.
-
----
-
-## When you should NOT use this
-
-* Your project already has a mature i18n setup
-* Translations depend heavily on runtime logic
-* You expect zero review after migration
-
----
-
-## Design philosophy
-
-* Explicit over clever
-* Predictable over magical
-* Narrow scope over feature bloat
-
-This tool solves **one specific problem**, deliberately.
-
----
+## 🇧🇷 Born in Brazil
+Projeto desenvolvido com foco em resolver a dor real de desenvolvedores que precisam entregar projetos globais rápido. 
 
 ## License
-
-Distributed under MIT license. See [LICENSE](LICENSE) for more details.
-
----
-
-## 🇧🇷 Nota
-
-README principal em inglês por usabilidade global.
-Português aqui só pra lembrar que esse projeto nasceu no Brasil.
+MIT © [Felipe Vetter](https://github.com/felipevetter)

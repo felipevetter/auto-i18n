@@ -1,6 +1,6 @@
 {
     "name": "@scopeact/autoi18n",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "Auto i18n tool",
     "type": "module",
     "main": "./dist/index.js",
