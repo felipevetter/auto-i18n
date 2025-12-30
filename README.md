@@ -1,4 +1,3 @@
-
 # @scopeact/autoi18n
 
 [![npm version](https://img.shields.io/npm/v/@scopeact/autoi18n.svg?style=flat-square)](https://www.npmjs.com/package/@scopeact/autoi18n)
@@ -88,12 +87,15 @@ Created via `init`, the `auto-i18n.config.json` controls the magic:
 
 ```json
 {
+  "$schema": "https://unpkg.com/@scopeact/autoi18n@latest/schema.json",
   "sourceLang": "pt",
-  "targetLangs": ["en", "es"],
+  "targetLangs": [ "en", "es" ],
+  "autoInject": false,
   "i18nLibrary": "@scopeact/autoi18n",
   "provider": "openai",
   "localesDir": "./locales",
-  "files": ["src/**/*.tsx"]
+  "model": "gpt-3.5-turbo",
+  "files": [ "app/**/*.tsx", "components/**/*.tsx" ]
 }
 ```
 
