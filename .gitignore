@@ -8,4 +8,4 @@ auto-i18n.config.json
 playground/
 *.tsbuildinfo
 .npmrc
-*.tsx
+tsup.config.bundled_*.mjs
